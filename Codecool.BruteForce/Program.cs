@@ -15,7 +15,8 @@ internal static class Program
 
     public static void Main(string[] args)
     {
-        string workDir = AppDomain.CurrentDomain.BaseDirectory;
+        /*
+        var workDir = AppDomain.CurrentDomain.BaseDirectory;
         var dbFile = $"{workDir}\\Resources\\Users.db";
 
         IUserRepository userRepository = new UserRepository(dbFile);
@@ -32,6 +33,24 @@ internal static class Program
 
         IAuthenticationService authenticationService = null;
         //BreakUsers(userCount, maxPwLength, authenticationService);
+        */
+        var workDir = AppDomain.CurrentDomain.BaseDirectory;
+        var dbFile = $"{workDir}/Resources/Users.db";
+
+        IUserRepository userRepository = new UserRepository(dbFile);
+        
+        //userRepository.Add("Béla", "1234");
+        //userRepository.Update(2, "Ákos", "4321");
+        //userRepository.Delete(2);
+        //userRepository.DeleteAll();
+        // var users = userRepository.GetAll();
+        // foreach (var user in users)
+        // {
+        //     Console.WriteLine("User Id: " + user.Id);
+        //     Console.WriteLine("User Name: " + user.UserName);
+        //     Console.WriteLine("User Email: " + user.Password);
+        // }
+        
 
         Console.WriteLine($"Press any key to exit.");
 
