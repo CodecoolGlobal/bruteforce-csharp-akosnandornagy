@@ -31,16 +31,24 @@ internal static class Program
         // }
         //userRepository.DeleteAll();
 
-        var passwordGenerator = new PasswordGenerator(LowercaseChars, UppercaseChars, Numbers);
-        var pw = passwordGenerator.Generate(50);
-        Console.WriteLine($"Generated password: {pw}");
-
-        /*var passwordGenerators = CreatePasswordGenerators();
+        // var passwordGenerator = new PasswordGenerator(LowercaseChars, UppercaseChars, Numbers);
+        // var pw = passwordGenerator.Generate(50);
+        // Console.WriteLine($"Generated password: {pw}");
+        
+        // 👇👇👇 Implementation of User Generator part
+        var passwordGenerators = CreatePasswordGenerators();
         IUserGenerator userGenerator = new UserGenerator(passwordGenerators);
-        int userCount = 10;
-        int maxPwLength = 4;
+        
+        const int userCount = 11;
+        const int maxPwLength = 11;
+        
+        var users = userGenerator.Generate(userCount, maxPwLength);
+        foreach (var user in users)
+        {
+            Console.WriteLine($"{user.Item1} {user.Item2}");
+        }
 
-        AddUsersToDb(userCount, maxPwLength, userGenerator, userRepository);
+        /*AddUsersToDb(userCount, maxPwLength, userGenerator, userRepository);
 
         Console.WriteLine($"Database initialized with {userCount} users; maximum password length: {maxPwLength}");
 
@@ -61,7 +69,7 @@ internal static class Program
     {
         var lowercasePwGen = new PasswordGenerator(LowercaseChars);
         var uppercasePwGen = new PasswordGenerator(LowercaseChars, UppercaseChars);
-        IPasswordGenerator numbersPwGen = null; //lowercase + uppercase + numbers
+        var numbersPwGen = new PasswordGenerator(LowercaseChars, UppercaseChars, Numbers);
 
         return new List<IPasswordGenerator>
         {
