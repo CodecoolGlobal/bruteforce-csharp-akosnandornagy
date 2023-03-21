@@ -19,40 +19,19 @@ internal static class Program
         var dbFile = $"{workDir}/Resources/Users.db";
 
         IUserRepository userRepository = new UserRepository(dbFile);
-        //userRepository.Add("Béla", "1234");
-        //userRepository.Update(2, "Ákos", "4321");
-        //userRepository.Delete(2);
-        // var users = userRepository.GetAll();
-        // foreach (var user in users)
-        // {
-        //     Console.WriteLine("User Id: " + user.Id);
-        //     Console.WriteLine("User Name: " + user.UserName);
-        //     Console.WriteLine("User Email: " + user.Password);
-        // }
-        //userRepository.DeleteAll();
-
-        // var passwordGenerator = new PasswordGenerator(LowercaseChars, UppercaseChars, Numbers);
-        // var pw = passwordGenerator.Generate(50);
-        // Console.WriteLine($"Generated password: {pw}");
+        userRepository.DeleteAll();
         
-        // 👇👇👇 Implementation of User Generator part
         var passwordGenerators = CreatePasswordGenerators();
         IUserGenerator userGenerator = new UserGenerator(passwordGenerators);
         
-        const int userCount = 11;
-        const int maxPwLength = 11;
-        
-        var users = userGenerator.Generate(userCount, maxPwLength);
-        foreach (var user in users)
-        {
-            Console.WriteLine($"{user.Item1} {user.Item2}");
-        }
+        const int userCount = 10;
+        const int maxPwLength = 4;
 
-        /*AddUsersToDb(userCount, maxPwLength, userGenerator, userRepository);
+        AddUsersToDb(userCount, maxPwLength, userGenerator, userRepository);
 
         Console.WriteLine($"Database initialized with {userCount} users; maximum password length: {maxPwLength}");
 
-        IAuthenticationService authenticationService = null;
+        /*IAuthenticationService authenticationService = null;
         //BreakUsers(userCount, maxPwLength, authenticationService);*/
         
         Console.WriteLine($"Press any key to exit.");
@@ -63,6 +42,11 @@ internal static class Program
     private static void AddUsersToDb(int count, int maxPwLength, IUserGenerator userGenerator,
         IUserRepository userRepository)
     {
+        var users = userGenerator.Generate(count, maxPwLength);
+        foreach (var user in users)
+        {
+            userRepository.Add(user.Item1, user.Item2);
+        }
     }
 
     private static IEnumerable<IPasswordGenerator> CreatePasswordGenerators()
