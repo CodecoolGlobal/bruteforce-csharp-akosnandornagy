@@ -1,4 +1,5 @@
-﻿using Codecool.BruteForce.Authentication;
+﻿using System.Diagnostics;
+using Codecool.BruteForce.Authentication;
 using Codecool.BruteForce.Passwords.Breaker;
 using Codecool.BruteForce.Passwords.Generator;
 using Codecool.BruteForce.Passwords.Model;
@@ -24,15 +25,15 @@ internal static class Program
         var passwordGenerators = CreatePasswordGenerators();
         IUserGenerator userGenerator = new UserGenerator(passwordGenerators);
         
-        const int userCount = 10;
+        const int userCount = 3;
         const int maxPwLength = 4;
 
         AddUsersToDb(userCount, maxPwLength, userGenerator, userRepository);
 
         Console.WriteLine($"Database initialized with {userCount} users; maximum password length: {maxPwLength}");
 
-        /*IAuthenticationService authenticationService = null;
-        //BreakUsers(userCount, maxPwLength, authenticationService);*/
+        IAuthenticationService authenticationService = new AuthenticationService(userRepository);
+        BreakUsers(userCount, maxPwLength, authenticationService);
         
         Console.WriteLine($"Press any key to exit.");
 
@@ -66,23 +67,31 @@ internal static class Program
         var passwordBreaker = new PasswordBreaker();
         Console.WriteLine("Initiating password breaker...\n");
 
-        for (int i = 1; i <= userCount; i++)
+        for (var i = 1; i <= userCount; i++)
         {
             var user = $"user{i}";
-            for (int j = 1; j <= maxPwLength; j++)
+            for (var j = 1; j <= maxPwLength; j++)
             {
                 Console.WriteLine($"Trying to break {user} with all possible password combinations with length = {j}... ");
 
                 //start Stopwatch
-
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
                 //Get all pw combinations
-                var pwCombinations = Array.Empty<string>();
-                bool broken = false;
+                //var pwCombinations = Array.Empty<string>(); I don't understand why is this an array!!!
+                var pwCombinations = passwordBreaker.GetCombinations(j);
+                var broken = false;
 
                 foreach (var pw in pwCombinations)
                 {
                     //Try to authenticate the current user with pw
                     //If successful, stop the stopwatch, and print the pw and the elapsed time to the console, then go to next user
+                    if (!authenticationService.Authenticate(user, pw)) continue;
+                    stopwatch.Stop();
+                    var elapsed = stopwatch.Elapsed;
+                    Console.WriteLine($"Elapsed time: {elapsed}\n Cracked password: {pw}");
+                    broken = true;
+                    break;
                 }
 
                 if (broken)
