@@ -15,14 +15,27 @@ internal static class Program
 
     public static void Main(string[] args)
     {
-        /*
         var workDir = AppDomain.CurrentDomain.BaseDirectory;
-        var dbFile = $"{workDir}\\Resources\\Users.db";
+        var dbFile = $"{workDir}/Resources/Users.db";
 
         IUserRepository userRepository = new UserRepository(dbFile);
-        userRepository.DeleteAll();
+        //userRepository.Add("Béla", "1234");
+        //userRepository.Update(2, "Ákos", "4321");
+        //userRepository.Delete(2);
+        // var users = userRepository.GetAll();
+        // foreach (var user in users)
+        // {
+        //     Console.WriteLine("User Id: " + user.Id);
+        //     Console.WriteLine("User Name: " + user.UserName);
+        //     Console.WriteLine("User Email: " + user.Password);
+        // }
+        //userRepository.DeleteAll();
 
-        var passwordGenerators = CreatePasswordGenerators();
+        var passwordGenerator = new PasswordGenerator(LowercaseChars, UppercaseChars, Numbers);
+        var pw = passwordGenerator.Generate(50);
+        Console.WriteLine($"Generated password: {pw}");
+
+        /*var passwordGenerators = CreatePasswordGenerators();
         IUserGenerator userGenerator = new UserGenerator(passwordGenerators);
         int userCount = 10;
         int maxPwLength = 4;
@@ -32,26 +45,8 @@ internal static class Program
         Console.WriteLine($"Database initialized with {userCount} users; maximum password length: {maxPwLength}");
 
         IAuthenticationService authenticationService = null;
-        //BreakUsers(userCount, maxPwLength, authenticationService);
-        */
-        var workDir = AppDomain.CurrentDomain.BaseDirectory;
-        var dbFile = $"{workDir}/Resources/Users.db";
-
-        IUserRepository userRepository = new UserRepository(dbFile);
+        //BreakUsers(userCount, maxPwLength, authenticationService);*/
         
-        //userRepository.Add("Béla", "1234");
-        //userRepository.Update(2, "Ákos", "4321");
-        //userRepository.Delete(2);
-        //userRepository.DeleteAll();
-        // var users = userRepository.GetAll();
-        // foreach (var user in users)
-        // {
-        //     Console.WriteLine("User Id: " + user.Id);
-        //     Console.WriteLine("User Name: " + user.UserName);
-        //     Console.WriteLine("User Email: " + user.Password);
-        // }
-        
-
         Console.WriteLine($"Press any key to exit.");
 
         Console.ReadKey();

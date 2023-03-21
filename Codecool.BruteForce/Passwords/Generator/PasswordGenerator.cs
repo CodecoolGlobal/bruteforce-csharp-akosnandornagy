@@ -1,4 +1,5 @@
-﻿using Codecool.BruteForce.Passwords.Model;
+﻿using System.Text;
+using Codecool.BruteForce.Passwords.Model;
 
 namespace Codecool.BruteForce.Passwords.Generator;
 
@@ -14,16 +15,28 @@ public class PasswordGenerator : IPasswordGenerator
 
     public string Generate(int length)
     {
-        return null;
+        var sb = new StringBuilder(length);
+        for (var i = 0; i < length; i++)
+        {
+            var randomCharacterSet = GetRandomCharacterSet();
+            var randomCharacter = GetRandomCharacter(randomCharacterSet);
+            sb.Append(randomCharacter);
+        }
+        return sb.ToString();
     }
 
     private AsciiTableRange GetRandomCharacterSet()
     {
-        return null;
+        var characterSetsNumber = _characterSets.Length;
+        var randomCharacterSet = Random.Next(characterSetsNumber);
+        return _characterSets[randomCharacterSet];
     }
 
     private static char GetRandomCharacter(AsciiTableRange characterSet)
     {
-        return (char)1;
+        var lowerBound = characterSet.Start;
+        var upperBound = characterSet.End;
+        var randomCharNum = Random.Next(lowerBound, upperBound + 1);
+        return (char)randomCharNum;
     }
 }
