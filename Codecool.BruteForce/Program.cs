@@ -64,6 +64,14 @@ internal static class Program
 
     private static void BreakUsers(int userCount, int maxPwLength, IAuthenticationService authenticationService)
     {
+        // Initializing Db 👇👇👇
+        var workDir = AppDomain.CurrentDomain.BaseDirectory;
+        var dbFile = $"{workDir}/Resources/CrackedUsers.db";
+        
+        ICrackedUserRepository crackedUsersRepository = new CrackedUserRepository(dbFile);
+        crackedUsersRepository.DeleteAll();
+        // until here 👆👆👆
+        
         var passwordBreaker = new PasswordBreaker();
         Console.WriteLine("Initiating password breaker...\n");
 
@@ -90,6 +98,7 @@ internal static class Program
                     stopwatch.Stop();
                     var elapsed = stopwatch.Elapsed;
                     Console.WriteLine($"Elapsed time: {elapsed}\n Cracked password: {pw}");
+                    AddCrackedUsersToDb(pw, elapsed, crackedUsersRepository);
                     broken = true;
                     break;
                 }
@@ -100,5 +109,10 @@ internal static class Program
                 }
             }
         }
+    }
+
+    private static void AddCrackedUsersToDb(string password, TimeSpan elapsedTime, ICrackedUserRepository crackedUsersRepository)
+    {
+        crackedUsersRepository.Add(password, elapsedTime);
     }
 }

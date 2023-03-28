@@ -20,6 +20,10 @@
       <Content Include="Resources\Users.db">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Resources\CrackedUsers.db" />
+      <Content Include="Resources\CrackedUsers.db">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
